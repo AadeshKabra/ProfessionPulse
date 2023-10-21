@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProfessionPulse - Private Employment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rowdies&family=Spectral:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-image: linear-gradient(to bottom, #e3f1f1, #fff);
+            background-repeat: no-repeat;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-image: linear-gradient(to left, #66b2b2, #b2d8d8);
+            color: #004c4c;
+            padding: 10px 20px;
+            border-radius: 25px;
+        }
+
+        .navbar-title {
+            font-size: 30px;
+            font-weight: bold;
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        .navbar-buttons {
+            display: flex;
+        }
+
+        .login-button, .signup-button{
+            margin-left: 1em;
+            padding: 8px 16px;
+            background-color: #008080;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Ubuntu', sans-serif;
+            font-size: 20px;
+            border-radius: 25px;
+        }
+
+        h1{
+            text-align: center;
+            font-family: 'Spectral', serif;
+            color: #004c4c;
+        }
+
+        .jobs-section{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .card{
+            display: flex;
+            margin-bottom: 5em;
+            /* flex-direction: column; */
+            background-color: #9bd6d6;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            height: 300px;
+            width: 1000px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .left-side{
+            flex: 1;
+            padding: 20px;
+            width: 30%;
+        }
+
+        .right-side{
+            flex: 1;
+            padding: 20px;
+            width: 70%;
+            box-sizing: border-box;
+            overflow: hidden;
+            padding-top: 10px;
+        }
+
+        .job-image{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .right-side h2, .right-side h3{
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-family: 'Spectral', serif;
+            color: #004c4c;
+        }
+
+        .right-side p{
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            max-height: 3em;
+            line-height: 1em;
+            text-overflow: ellipsis;
+            font-family: 'Ubuntu', sans-serif;
+            color: #004c4c;
+        }
+
+        .labels{
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        .label-button{
+            background-color: #004c4c;
+            color: #fff;
+            font-family: 'Ubuntu', sans-serif;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+            margin-right: 1em;
+            margin-top: 1em;
+            margin-bottom: 1em;
+            padding: 8px 16px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-title">ProfessionPulse</div>
+        <div class="navbar-buttons">
+            {% if session.role == "Employee" or session.role == "Employer" %}
+                <form action="/user-profile" method="POST">
+                    <button type="submit" class="login-button">{{ session.username }}</button>
+                </form>
+            {% else %}
+                <form action="/user-login" method="POST">
+                    <button type="submit" class="login-button">Login</button>
+                </form>
+                <form action="/user-signup" method="POST">
+                    <button type="submit" class="signup-button">Signup</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+    <h1>Private Jobs</h1>
+    <div class="jobs-section">
+        {% for job in jobs %}
+            <a class="card" href='/job/{{ job._id }}'>
+                <div class="left-side">
+                    <img src="static\job_image.jpg" alt="Job-image" class="job-image">
+                </div>
+                <div class="right-side">
+                    <h2>{{ job.Job_Title }}</h2>
+                    <h3>{{ job.Name }}</h3>
+                    <p>{{ job.Type }}</p>
+                    <p>{{ job.Job_Description }}</p>
+                    <div class="labels">
+                        {% for label in job.Labels %}
+                            <button class="label-button">{{ label }}</button>
+                        {% endfor %}
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</body>
+</html>

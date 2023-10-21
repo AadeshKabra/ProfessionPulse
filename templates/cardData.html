@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rowdies&family=Spectral:wght@500&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background-image: linear-gradient(to top, #a5bfbf, #fff);
+            background-repeat: no-repeat;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-image: linear-gradient(to left, #66b2b2, #b2d8d8);
+            color: #004c4c;
+            padding: 10px 20px;
+            border-radius: 25px;
+        }
+
+        .navbar-title {
+            font-size: 30px;
+            font-weight: bold;
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        .navbar-buttons {
+            display: flex;
+        }
+
+        .login-button,
+        .signup-button,
+        .apply-button {
+            margin-left: 1em;
+            padding: 8px 16px;
+            background-color: #008080;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Ubuntu', sans-serif;
+            font-size: 20px;
+            border-radius: 25px;
+        }
+
+        .heading {
+            text-align: center;
+            height: 30px;
+            font-family: 'Spectral', serif;
+            font-size: 30px;
+            margin-top: 2em;
+            margin-bottom: 2em;
+            color: #004c4c;
+        }
+
+        .job-details {
+            text-align: center;
+            width: 50%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            margin: 0 auto;
+            background-color: #b2d8d8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: justify;
+            justify-content: center;
+        }
+
+        .job-details p {
+            width: 70%;
+            text-align: center;
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        .job-details h3 {
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        .job-details h1,
+        .job-details h2 {
+            font-family: 'Spectral', serif;
+        }
+
+        .labels {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .label-button {
+            background-color: #218181;
+            color: #fff;
+            font-family: 'Ubuntu', sans-serif;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+            margin-right: 1em;
+            margin-top: 1em;
+            margin-bottom: 1em;
+            padding: 8px 16px;
+        }
+
+        .apply-button {
+            width: 40%;
+        }
+
+        .apply-button:hover {
+            cursor: pointer;
+            background-color: #66b2b2;
+            color: #004c4c;
+        }
+
+        .dialog {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-image: linear-gradient(to top, #86adad, #fff);
+            border-radius: 10px;
+        }
+
+        .dialog-content {
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #86adad;
+            width: 50%;
+            background-color: #b2d8d8;
+            color: #004c4c;
+            font-family: 'Ubuntu', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .dialog-button {
+            margin-left: 1em;
+            padding: 8px 16px;
+            background-color: #008080;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Ubuntu', sans-serif;
+            font-size: 20px;
+            border-radius: 25px;
+        }
+
+        #applied:hover{
+            cursor: default;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-title">ProfessionPulse</div>
+        <div class="navbar-buttons">
+            {% if session.role == "Employee" or session.role == "Employer" %}
+            <form action="/user-profile" method="POST">
+                <button type="submit" class="login-button" id="login-button">{{ session.username }}</button>
+            </form>
+            {% else %}
+            <form action="/user-login" method="POST">
+                <button type="submit" class="login-button">Login</button>
+            </form>
+            <form action="/user-signup" method="POST">
+                <button type="submit" class="signup-button">Signup</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="heading">
+        Job Details
+    </div>
+
+    <div class="job-details">
+        <h1 class="title">{{ job.Job_Title }}</h1>
+        <h2 class="name">{{ job.Name }}</h2>
+        <p class="description">{{ job.Job_Description }}</p>
+        <h3 class="email">Email: {{ job.Email }}</h3>
+        <h3 class="type">Type of Employment: {{ job.Type }}</h3>
+        <div class="labels">
+            {% for label in job.Labels %}
+                <button class="label-button">{{ label }}</button>
+            {% endfor %}
+        </div>
+        {% if session.user_id in job.users %}
+            <button class="apply-button" id="applied">Applied</button>
+        {% else %}
+            <button class="apply-button" id="applyButton">Apply</button>
+        {% endif %}
+        <input type="hidden" id="jobId" name="jobId" value="{{ job._id }}">
+    </div>
+
+    <div class="dialog" id="dialog">
+        <div class="dialog-content">
+            <p>Are you sure you want to apply?</p>
+            <div class="dialog-buttons">
+                <button class="dialog-button" id="yes">Yes</button>
+                <button class="dialog-button" id="no">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openDialog() {
+            dialog.style.display = 'block';
+        }
+
+        function closeDialog() {
+            dialog.style.display = 'none';
+        }
+
+        document.getElementById("applyButton").addEventListener("click", openDialog);
+
+        document.getElementById("no").addEventListener("click", closeDialog);
+
+        document.getElementById("yes").addEventListener("click", function () {
+            closeDialog();
+
+            let data = {
+                jobId: document.getElementById("jobId").value
+            };
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "/check-login-status", true);
+            // xhr.setRequestHeader("Content-Type", "application/json")
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState == 4){
+                    if(xhr.status == 200){
+                        const response = JSON.parse(xhr.responseText);
+                        if(response.loggedIn){
+                            console.log(response);
+                            const xhrApply = new XMLHttpRequest();
+                            xhrApply.open("POST", "/apply-job", true)
+                            xhrApply.setRequestHeader("Content-Type", "application/json")
+                            xhrApply.onreadystatechange = function(){
+                                if(xhrApply.readyState == 4){
+                                    if(xhrApply.status == 200){
+                                        const applyResponse = JSON.parse(xhrApply.responseText);
+                                        console.log("Job application response: ", applyResponse);
+                                    }else{
+                                        console.error("Error: ", xhrApply.status);
+                                    }
+                                }
+                            }
+                            xhrApply.send(JSON.stringify(data))
+                        }else{
+                            window.location.href="/user-login"
+                        }
+                    }else{
+                        console.error("Error: ", xhr.status);
+                    }
+                }
+            }
+            xhr.send();
+        });
+
+        document.getElementById("login-button").addEventListener('click', function(){
+            const currentURL = window.location.href
+            console.log(currentURL);
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/store-url", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify({url: currentURL}));
+        });
+
+    </script>
+</body>
+
+</html>

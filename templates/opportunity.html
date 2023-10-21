@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProfessionPulse</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rowdies&family=Spectral:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-image: linear-gradient(to bottom, #e3f1f1, #fff);
+            background-repeat: no-repeat;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-image: linear-gradient(to left, #66b2b2, #b2d8d8);
+            color: #004c4c;
+            padding: 10px 20px;
+            border-radius: 25px;
+        }
+
+        .navbar-title {
+            font-size: 30px;
+            font-weight: bold;
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        .navbar-buttons {
+            display: flex;
+        }
+
+        .login-button{
+            margin-left: 1em;
+            padding: 8px 16px;
+            background-color: #008080;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Ubuntu', sans-serif;
+            font-size: 20px;
+            border-radius: 25px;
+        }
+
+        .heading{
+            text-align: center;
+            height: 30px;
+            font-family: 'Spectral', serif;
+            font-size: 30px;
+            margin-top: 2em;
+            margin-bottom: 2em;
+        }
+
+        #labelList {
+            margin-top: 10px;
+        }
+
+        .label-item {
+            display: inline-block;
+            margin-right: 10px;
+            background-color: #008080;
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 20px;
+            font-family: 'Spectral', serif;
+        }
+
+        .container-form {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: flex-start;
+            height: 100%;
+        }
+
+        .left-side, .right-side {
+            flex: 1;
+            padding: 20px;
+            width: 48%;
+            box-sizing: border-box;
+        }
+
+        .left-side label, .right-side label{
+            display: block;
+            margin-bottom: 10px;
+            font-family: 'Ubuntu', sans-serif;
+            font-size: 20px;
+        }
+
+        .left-side input, .right-side textarea{
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 5px;
+            font-family: 'Ubuntu', sans-serif;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        #description{
+            overflow-y: auto;
+        }
+
+        .opportunity-form{
+            display: flex;
+            justify-content: center;
+            background-color: #b2d8d8;
+            margin-left: 5em;
+            margin-right: 5em;
+            border-radius: 15px;
+            margin-top: 2em;
+            padding-top: 1em;
+            padding-bottom: 1em;
+        }
+
+        .left-side{
+            height: 100%;
+            font-size: 16px;
+        }
+
+        select{
+            width: 100%;
+        }
+
+        .form-input{
+            margin-bottom: 1.5em;
+            font-size: 20px;
+        }
+
+        .right-side button{
+            width: 100%;
+            margin-top: 2em;
+            background-color: #008080;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-family: 'Spectral', serif;
+        }
+
+        #post-button:hover{
+            background-color: #7db6b6;
+            color: #004c4c;
+            border: 1px solid #004c4c;
+        }
+
+        .container-form input, .container-form select{
+            height: 24px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-image: linear-gradient(to bottom, #e3f1f1, #fff);
+            padding: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            border-radius: 10px;
+        }
+
+        #messageContent{
+            font-size: 20px;
+            font-family: 'Spectral', serif;
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-title">ProfessionPulse</div>
+        <div class="navbar-buttons">
+            {% if session.role == "Employee" or session.role == "Employer" %}
+                <form action="/user-profile" method="POST">
+                    <button type="submit" class="login-button">{{ session.username }}</button>
+                </form>
+            {% else %}
+                <form action="/user-login" method="POST">
+                    <button type="submit" class="login-button">Login</button>
+                </form>
+                <form action="/user-signup" method="POST">
+                    <button type="submit" class="signup-button">Signup</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+    3
+    <div id="messageModal" class="modal">
+        <p id="messageContent"></p>
+    </div>
+    <form action="/opportunity-form" method="post" class="opportunity-form" onsubmit="prepareLabels()">
+        <div class="container-form">
+            <div class="left-side">
+                <div class="form-input">
+                    <label for="employer-name">Employer Name:</label>
+                    <input type="text" name="employer-name" id="employer-name" placeholder="Employer name" required>
+                </div>
+                <div class="form-input">
+                    <label for="employer-email">Employer Email:</label>
+                    <input type="email" name="employer-email" id="employer-email" placeholder="Email" required>
+                </div>
+                <div class="form-input">
+                    <label for="job-title">Job Title:</label>
+                    <input type="text" name="job-title" id="job-title" placeholder="Job Title" required>
+                </div>
+                <div class="form-input">
+                    <label for="type">Select type of employment</label>
+                    <select id="type" name="type">
+                        <option value="-">Select</option>
+                        <option value="private">Private</option>
+                        <option value="public">Public</option>
+                        <option value="women">Women</option>
+                        <option value="pwds">PWD</option>
+                        <option value="local">Local</option>
+                    </select>
+                </div>
+                <div class="form-input">
+                    <label for="labelInput">Enter Labels:</label>
+                    <input type="text" id="labelInput" placeholder="Labels">
+                </div>
+                <div id="labelList" name="labelList"></div>
+                <input type="hidden" id="labelValues" name="labelValues">
+            </div>
+            <div class="right-side">
+                <label for="job-description">Job Description:</label>
+                <textarea placeholder="Description" rows="25" cols="70" id="job-description" name="job-description"></textarea>
+                <button type="submit" id="post-button">Post</button>
+            </div>
+        </div>
+    </form>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#labelInput').keypress(function (event) {
+                if (event.which == 13) {
+                    var labelText = $(this).val().trim();
+                    if (labelText !== '') {
+                        var labelItem = $('<div class="label-item"></div>').text(labelText);
+                        $('#labelList').append(labelItem);
+                        $(this).val('');
+                        event.preventDefault();
+                    }
+                }
+            })
+        })
+
+        function prepareLabels(){
+            var labelDivs = document.querySelectorAll('#labelList > div');
+            var labelValues = Array.from(labelDivs).map(function(div){
+                return div.textContent || div.innerText;
+            }).join(',');
+
+            document.getElementById("labelValues").value = labelValues;
+        }
+
+        function showMessage(message) {
+            var messageModal = document.getElementById("messageModal");
+            var messageContent = document.getElementById("messageContent");
+            messageContent.textContent = message; // Set the message content
+            messageModal.style.display = "block";
+            
+            setTimeout(function() {
+                messageModal.style.display = "none";
+            }, 5000); // 5000 milliseconds (5 seconds)
+        }
+
+        window.onload = function() {
+            var message = "{{ message }}";
+            showMessage(message);
+        };
+
+
+    </script>
+</body>
+
+</html>

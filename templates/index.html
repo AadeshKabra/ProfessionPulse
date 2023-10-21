@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProfessionPulse</title>
+    <link rel="stylesheet" href="static\index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rowdies&family=Spectral:wght@500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            background-image: linear-gradient(to bottom, #e3f1f1, #fff);
+            background-repeat: no-repeat;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-image: linear-gradient(to left, #66b2b2, #b2d8d8);
+            color: #004c4c;
+            padding: 10px 20px;
+            border-radius: 25px;
+        }
+
+        .navbar-title {
+            font-size: 30px;
+            font-weight: bold;
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        .navbar-buttons {
+            display: flex;
+        }
+
+        .login-button,
+        .signup-button {
+            margin-left: 10px;
+            padding: 8px 16px;
+            background-color: #008080;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Ubuntu', sans-serif;
+            font-size: 20px;
+            border-radius: 25px;
+        }
+
+        .login-button:hover,
+        .signup-button:hover {
+            background-color: #b2d8d8;
+            color: #004c4c;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            max-width: 100%;
+        }
+
+        .content-left {
+            flex: 1;
+            /* Takes remaining space */
+            padding: 20px;
+            margin-left: 2em;
+            margin-right: 1em;
+        }
+
+        .image-right img {
+            max-width: 700px;
+            /* Ensure the image doesn't exceed its container */
+            height: 500px;
+            margin-top: 40px;
+            margin-right: 3em;
+        }
+
+        .content-left h1 {
+            font-family: 'Rowdies', cursive;
+            color: #004c4c;
+        }
+
+        .content-left h2 {
+            font-family: 'Spectral', serif;
+            color: #004c4c;
+        }
+
+        .content-left p {
+            font-family: 'Spectral', serif;
+            font-size: 20px;
+            text-align: justify;
+            color: #004c4c;
+        }
+
+        .start-button {
+            background-color: #008080;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 8px 16px;
+            margin-left: 2em;
+            border-radius: 10px;
+        }
+
+        .start-button:hover {
+            background-color: #b2d8d8;
+            color: #004c4c;
+        }
+
+        .image-right img{
+            border-radius: 25px;
+        }
+
+        .container2{
+            background: linear-gradient(to top, #b3dbdb, #fff);
+            text-align: center;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        .container2 h1{
+            font-family: 'Rowdies', cursive;
+            color: #004c4c;
+            margin-bottom: 20px;
+        }
+
+        .card-group{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card{
+            width: 20%;
+            margin: 2em;
+            padding: 10px;
+            border: 1px solid #004c4c;
+            text-align: center;
+            
+            border-radius: 10px;
+            font-size: 20px;
+            height: 4em;
+            text-align: center;
+            background-color: #008080;
+            color: #e3f1f1;
+        }
+
+        .card:hover {
+            cursor: pointer;
+            background-color: #b2d8d8;
+            color: #004c4c;
+            box-shadow: 0px 0px 10px 0px #004c4c;
+        }
+
+        .card button{
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            border: 1px solid #b2d8d8;
+            box-sizing: border-box;
+            text-align: center;
+            background-color: #b2d8d8;
+            color: #004c4c;
+            font-family: 'Spectral', serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-title">ProfessionPulse</div>
+        <div class="navbar-buttons">
+            {% if session.role == "Employee" or session.role == "Employer" %}
+                <form action="/user-profile" method="POST">
+                    <button type="submit" class="login-button">{{ session.username }}</button>
+                </form>
+                <form action="/logout" method="POST">
+                    <button type="submit" class="login-button">Logout</button>
+                </form>
+            {% else %}
+                <form action="/user-login" method="POST">
+                    <button type="submit" class="login-button">Login</button>
+                </form>
+                <form action="/user-signup" method="POST">
+                    <button type="submit" class="signup-button">Signup</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- <div class="overlay"></div> -->
+        <div class="content-left">
+            <h1>ProfessionPulse</h1>
+            <h2>Your Career's Heartbeat</h2>
+            <p>At ProfessionPulse, we're not just building careers, we're fostering partnerships. Join us today and experience a seamless, data-driven approach to employment, where opportunities meet analytics, and success stories are waiting to be written.</p>
+            <form action="/start" method="post" id="start-form">
+                <div class="start-buttons">
+                    {% if session.role=="Employee" %}
+                        <button class="start-button" onclick="setButtonValue('searchJobs')">Search Jobs</button>
+                    {% elif session.role=="Employer" %}
+                        <button class="start-button" onclick="setButtonValue('searchEmployees')">Search Employees</button>
+                        <button class="start-button" onclick="setButtonValue('postOpportunity')">Post Opportunity</button>
+                    {% else %}
+                        <button class="start-button" onclick="setButtonValue('searchJobs')">Search Jobs</button>
+                        <button class="start-button" onclick="setButtonValue('searchEmployees')">Search Employees</button>
+                    {% endif %}
+                </div>
+                <input type="hidden" id="submitButton" name="submitButton" value="">
+                <input type="submit" style="display: none;">
+            </form>
+            
+
+        </div>
+        <div class="image-right">
+            <img src="static\land3.jpg" alt="Image3" class="landing3">
+        </div>
+    </div>
+
+    <div class="container2">
+        <h1>Jobs</h1>
+        <form action="/jobs" method="post" id="jobs-form">
+            <div class="cards"> 
+                <div class="card-group">
+                    <button class="card" type="button" onclick="setButtonValue('private')">Private Employment</button>
+                    <button class="card" type="button" onclick="setButtonValue('public')">Public Employment</button>
+                    <button class="card" type="button" onclick="setButtonValue('self')">Self Employment</button>
+                </div>
+                <div class="card-group">
+                    <button class="card" type="button" onclick="setButtonValue('pwds')">Jobs for PWDs</button>
+                    <button class="card" type="button" onclick="setButtonValue('women')">Jobs for Women</button>
+                    <button class="card" type="button" onclick="setButtonValue('local')">Local Services</button>
+                </div>
+            </div>
+            <input type="hidden" id="submitButton2" name="submitButton2" value="">
+            <input type="submit" style="display: none;">
+        </form>
+        
+    </div>
+
+    <script>
+        function setButtonValue(buttonName){
+            if(buttonName == "searchJobs" || buttonName == "searchEmployees" || buttonName == "postOpportunity"){
+                document.getElementById('submitButton').value = buttonName;
+                document.getElementById('start-form').submit();
+            }else{
+                document.getElementById('submitButton2').value = buttonName;
+                document.getElementById('jobs-form').submit();
+            }
+            
+        }   
+    </script>
+
+</body>
+
+</html>
